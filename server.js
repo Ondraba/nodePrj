@@ -18,12 +18,6 @@ MongoClient.connect('mongodb://Archie:Clovek789@ds157559.mlab.com:57559/nodecrud
    })
   })
 
-//
-// app.listen(3000, function() {
-//      console.log('listening on 3000')
-//    })
-
-
 app.get('/', (req, res) => {
      db.collection('quotes').find().toArray((err, result) => {
        if (err) return console.log(err)
@@ -40,7 +34,7 @@ app.post('/quotes', (req, res) => {
        })
      })
 
-     app.post('/trigger', (req, res) => {
+app.post('/trigger', (req, res) => {
             db.collection('quotes').save(req.body, (err, result) => {
               if (err) return console.log(err)
               console.log('saved to database')
@@ -49,19 +43,14 @@ app.post('/quotes', (req, res) => {
           })
 
 app.put('/quotes', (req, res) => {
-       db.collection('quotes')
-       .findOneAndUpdate({name: 'Yoda'}, { //key pair filter under collection
-         $set: { //mongodb set, inc, push
-           name: req.body.name,
-           quote: req.body.quote
-         }
-       }, {
-         sort: {_id: -1}, //optiona sort parameter
-         upsert: true
-       }, (err, result) => {
+       db.collection('quotes').findOneAndUpdate(
+         {name: 'Yoda'},
+         {$set: { name: req.body.name, quote: req.body.quote }},
+                { sort: {_id: -1},upsert: true },
+         (err, result) => {
          if (err) return res.send(err)
          res.send(result) //call back send result to fetch request
-       })
+         })
      })
 
      app.put('/triggerPut', (req, res) => {
@@ -78,16 +67,23 @@ app.put('/quotes', (req, res) => {
               res.send(result) //call back send result to fetch request
             })
           })
+
+
+        app.delete('/quotes', (req, res) => {
+        db.collection('quotes').findOneAndDelete({name: req.body.name},
+        (err, result) => {
+          if (err) return res.send(500, err)
+          console.log('tes')
+          console.log('quotes')
+          res.send('A darth vadar quote got deleted')
+        })
+      })
   //
   //    query,
   // update,
   // options,
   // callback
 // res.render(view, locals)
-
-
-
-
 
 // nodemon restart server automaticly
 

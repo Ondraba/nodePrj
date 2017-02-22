@@ -1,5 +1,6 @@
 var update = document.getElementById('update')
 var button = document.getElementById('button')
+var del = document.getElementById('delete')
 
 update.addEventListener('click', function () {
     console.log('ehm')
@@ -22,7 +23,6 @@ update.addEventListener('click', function () {
 
 
 button.addEventListener('click', function () {
-    console.log('ehm')
     fetch('quotes', {
     method: 'put',
     headers: {'Content-Type': 'application/json'},
@@ -36,5 +36,29 @@ button.addEventListener('click', function () {
   .then(data => {
     console.log(data)
     window.location.reload(true)
+  })
+})
+
+
+
+del.addEventListener('click', function () {
+  fetch('quotes', {
+    method: 'delete',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      'name': 'Darth Vader'
+    })
+  })
+  .then(res => {
+    if (res.ok)
+    console.log(res)
+    return res //data uz jsou json
+  })
+  .then(data => {
+    console.log(data)
+    window.location.reload(true)
+    console.log(data.name)
   })
 })
